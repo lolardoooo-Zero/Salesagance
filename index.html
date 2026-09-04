@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Dashboard. Manage your automotive sales operations.">
+    <title>Dashboard – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/dashboard.css">
+</head>
+<body>
+
+<div class="app-layout">
+
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="./logo.jpg" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand-text">
+                Sales
+                <span>AganceOnline</span>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Main</span>
+
+            <a href="./index.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                Dashboard
+            </a>
+            <a href="./cars.html" class="nav-link">
+                <span class="nav-icon">🚗</span>
+                Cars Inventory
+            </a>
+            <a href="./wanted.html" class="nav-link">
+                <span class="nav-icon">🔍</span>
+                Wanted Cars
+            </a>
+
+            <!-- Owner only -->
+            <span class="nav-section-label" data-role="owner">Management</span>
+            <a href="./users.html" class="nav-link" data-role="owner">
+                <span class="nav-icon">👥</span>
+                Users
+            </a>
+
+            <span class="nav-section-label">Account</span>
+            <a href="./profile.html" class="nav-link">
+                <span class="nav-icon">👤</span>
+                Profile
+            </a>
+            <a href="#" class="nav-link" id="logout-btn">
+                <span class="nav-icon">🚪</span>
+                Logout
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-user" onclick="window.location.href='./profile.html'">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <!-- Topbar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle" id="sidebar-toggle">☰</button>
+                <h2 class="topbar-title">Dashboard</h2>
+            </div>
+            <div class="topbar-right">
+                <span class="topbar-time" id="topbar-time"></span>
+                <button class="btn btn-sm btn-outline" onclick="window.location.href='./profile.html'">
+                    👤 Profile
+                </button>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <div class="page-content">
+
+            <!-- Welcome -->
+            <div class="page-header">
+                <div>
+                    <h1 id="welcome-heading">Good day! 👋</h1>
+                    <p id="welcome-sub">Here's your overview for today.</p>
+                </div>
+                <!-- Owner only: quick add button -->
+                <div data-role="owner">
+                    <a href="./cars.html" class="btn btn-primary">
+                        ＋ Add Car
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid" id="stats-grid">
+                <!-- Populated dynamically -->
+                <div class="stat-card" style="grid-column: 1/-1; display:flex; align-items:center; justify-content:center; padding: 40px; color: var(--color-muted);">
+                    <div class="loader-spinner" style="width:32px;height:32px;border-width:3px;"></div>
+                </div>
+            </div>
+
+            <!-- Dashboard grid -->
+            <div class="dashboard-grid">
+                <!-- Recent Cars -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>🚗 Recent Cars</h2>
+                        <a href="./cars.html" class="btn btn-sm btn-ghost">View All →</a>
+                    </div>
+                    <div class="section-body">
+                        <div class="recent-list" id="recent-cars-list">
+                            <div class="empty-state" style="padding: 32px;">
+                                <div class="loader-spinner" style="width:24px;height:24px;border-width:2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Wanted Cars -->
+                <div class="dashboard-section">
+                    <div class="section-header">
+                        <h2>🔍 Wanted Cars</h2>
+                        <a href="./wanted.html" class="btn btn-sm btn-ghost">View All →</a>
+                    </div>
+                    <div class="section-body">
+                        <div class="recent-list" id="recent-wanted-list">
+                            <div class="empty-state" style="padding: 32px;">
+                                <div class="loader-spinner" style="width:24px;height:24px;border-width:2px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script src="./js/realtime.js"></script>
+<script src="./js/dashboard.js"></script>
+
+</body>
+</html>

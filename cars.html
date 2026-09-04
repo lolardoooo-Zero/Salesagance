@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Car Inventory. Browse and manage the complete vehicle database.">
+    <title>Cars Inventory – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/cars.css">
+</head>
+<body>
+
+<div class="app-layout">
+
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="./logo.jpg" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand-text">Sales <span>AganceOnline</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Main</span>
+            <a href="./index.html" class="nav-link"><span class="nav-icon">📊</span>Dashboard</a>
+            <a href="./cars.html" class="nav-link"><span class="nav-icon">🚗</span>Cars Inventory</a>
+            <a href="./wanted.html" class="nav-link"><span class="nav-icon">🔍</span>Wanted Cars</a>
+            <span class="nav-section-label" data-role="owner">Management</span>
+            <a href="./users.html" class="nav-link" data-role="owner"><span class="nav-icon">👥</span>Users</a>
+            <span class="nav-section-label">Account</span>
+            <a href="./profile.html" class="nav-link"><span class="nav-icon">👤</span>Profile</a>
+            <a href="#" class="nav-link" id="logout-btn"><span class="nav-icon">🚪</span>Logout</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user" onclick="window.location.href='./profile.html'">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle" id="sidebar-toggle">☰</button>
+                <h2 class="topbar-title">Cars Inventory</h2>
+            </div>
+            <div class="topbar-right">
+                <!-- Owner only: Add car button -->
+                <button class="btn btn-primary" id="add-car-btn" data-role="owner" style="display:none;">
+                    ＋ Add Car
+                </button>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <!-- Filter bar -->
+            <div class="filter-bar">
+                <div class="search-bar" style="max-width: 320px;">
+                    <span class="search-bar-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Search brand, model...">
+                </div>
+                <div class="filter-group">
+                    <select class="form-control" id="filter-status" style="width:auto;">
+                        <option value="">All Status</option>
+                        <option value="available">Available</option>
+                        <option value="reserved">Reserved</option>
+                        <option value="sold">Sold</option>
+                        <option value="unavailable">Unavailable</option>
+                    </select>
+                    <select class="form-control" id="filter-transmission" style="width:auto;">
+                        <option value="">Transmission</option>
+                        <option value="automatic">Automatic</option>
+                        <option value="manual">Manual</option>
+                        <option value="cvt">CVT</option>
+                        <option value="dct">DCT</option>
+                    </select>
+                    <select class="form-control" id="filter-fuel" style="width:auto;">
+                        <option value="">Fuel Type</option>
+                        <option value="petrol">Petrol</option>
+                        <option value="diesel">Diesel</option>
+                        <option value="electric">Electric</option>
+                        <option value="hybrid">Hybrid</option>
+                        <option value="plug-in hybrid">Plug-in Hybrid</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" id="clear-filters">✕ Clear</button>
+                </div>
+                <span class="text-muted text-sm" id="results-count" style="margin-left:auto;"></span>
+            </div>
+
+            <!-- Cars Grid -->
+            <div id="cars-grid" class="cars-grid">
+                <div style="grid-column:1/-1; display:flex; justify-content:center; padding:60px;">
+                    <div class="loader-spinner" style="width:40px;height:40px;border-width:3px;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- ============================================================
+   CAR DETAIL MODAL
+   ============================================================ -->
+<div class="modal-overlay" id="car-detail-modal">
+    <div class="modal modal-xl" id="car-detail-content">
+        <div class="modal-header">
+            <h2 id="car-detail-heading">Car Details</h2>
+            <button class="btn btn-ghost btn-sm" data-close-modal="car-detail-modal">✕ Close</button>
+        </div>
+        <div class="modal-body">
+            <div class="car-detail-grid" id="car-detail-body">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+        <div class="modal-footer" id="car-detail-footer">
+            <!-- Owner action buttons added dynamically -->
+            <button class="btn btn-outline" data-close-modal="car-detail-modal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+   ADD / EDIT CAR MODAL
+   ============================================================ -->
+<div class="modal-overlay" id="car-form-modal">
+    <div class="modal modal-lg">
+        <div class="modal-header">
+            <h2 id="car-form-title">Add New Car</h2>
+            <button class="btn btn-ghost btn-sm" data-close-modal="car-form-modal">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="car-form" novalidate>
+                <input type="hidden" id="car-id">
+                <div class="car-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Brand *</label>
+                        <input type="text" id="cf-brand" class="form-control" placeholder="e.g. Toyota" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Model *</label>
+                        <input type="text" id="cf-model" class="form-control" placeholder="e.g. Land Cruiser" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year *</label>
+                        <input type="number" id="cf-year" class="form-control" placeholder="2023" min="1900" max="2100" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Trim</label>
+                        <input type="text" id="cf-trim" class="form-control" placeholder="e.g. VXR, Sport">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Color</label>
+                        <input type="text" id="cf-color" class="form-control" placeholder="e.g. Pearl White">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mileage (km)</label>
+                        <input type="number" id="cf-mileage" class="form-control" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Transmission</label>
+                        <select id="cf-transmission" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="automatic">Automatic</option>
+                            <option value="manual">Manual</option>
+                            <option value="cvt">CVT</option>
+                            <option value="dct">DCT</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fuel Type</label>
+                        <select id="cf-fuel" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                            <option value="electric">Electric</option>
+                            <option value="hybrid">Hybrid</option>
+                            <option value="plug-in hybrid">Plug-in Hybrid</option>
+                            <option value="lpg">LPG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Engine</label>
+                        <input type="text" id="cf-engine" class="form-control" placeholder="e.g. 3.5L V6">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Horsepower</label>
+                        <input type="number" id="cf-hp" class="form-control" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Body Type</label>
+                        <input type="text" id="cf-body" class="form-control" placeholder="e.g. SUV, Sedan">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Condition</label>
+                        <select id="cf-condition" class="form-control">
+                            <option value="used">Used</option>
+                            <option value="new">New</option>
+                            <option value="certified">Certified</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Price *</label>
+                        <input type="number" id="cf-price" class="form-control" placeholder="0" min="0" required>
+                    </div>
+                    <input type="hidden" id="cf-currency" value="EGP">
+
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" id="cf-location" class="form-control" placeholder="City or area">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select id="cf-status" class="form-control">
+                            <option value="available">Available</option>
+                            <option value="reserved">Reserved</option>
+                            <option value="sold">Sold</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">VIN</label>
+                        <input type="text" id="cf-vin" class="form-control" placeholder="Vehicle ID Number">
+                    </div>
+                    <div class="form-group car-form-full">
+                        <label class="form-label">Description</label>
+                        <textarea id="cf-description" class="form-control" rows="3" placeholder="Additional details about this car..."></textarea>
+                    </div>
+                    <!-- Image Upload -->
+                    <div class="car-form-full">
+                        <label class="form-label" style="margin-bottom: 8px; display:block;">Images</label>
+                        <div class="image-upload-area" id="upload-area">
+                            <input type="file" id="car-images-input" accept="image/*" multiple>
+                            <div class="upload-icon">📷</div>
+                            <p style="font-weight:600;">Click or drag images here</p>
+                            <p class="text-muted text-sm">JPG, PNG, WEBP — Multiple files supported</p>
+                        </div>
+                        <div class="image-preview-list" id="image-preview-list"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-close-modal="car-form-modal">Cancel</button>
+            <button class="btn btn-primary" id="save-car-btn">💾 Save Car</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script src="./js/realtime.js"></script>
+<script src="./js/cars.js"></script>
+</body>
+</html>

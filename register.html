@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Register for a new account. Join your automotive sales team.">
+    <title>Register – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/auth.css">
+</head>
+<body>
+
+<div class="auth-page">
+
+    <!-- Left: Brand Panel -->
+    <div class="auth-brand">
+        <div class="auth-brand-inner">
+            <div class="auth-logo-wrap">
+                <img src="./logo.jpg" alt="Sales AganceOnline Logo">
+            </div>
+            <div>
+                <div class="auth-brand-tagline">
+                    Join the<br><span>Team</span>
+                </div>
+            </div>
+            <p class="auth-brand-description">
+                Create your account and get started with Sales AganceOnline. Your account will be reviewed and approved by your team Owner before access is granted.
+            </p>
+            <div class="auth-brand-stats">
+                <div class="auth-stat">
+                    <span class="auth-stat-value">Step 1</span>
+                    <span class="auth-stat-label">Register</span>
+                </div>
+                <div class="auth-stat">
+                    <span class="auth-stat-value">Step 2</span>
+                    <span class="auth-stat-label">Get Approved</span>
+                </div>
+                <div class="auth-stat">
+                    <span class="auth-stat-value">Step 3</span>
+                    <span class="auth-stat-label">Start Selling</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Form Panel -->
+    <div class="auth-form-panel">
+        <div class="auth-form-wrap">
+
+            <!-- Mobile logo -->
+            <div class="auth-mobile-logo">
+                <img src="./logo.jpg" alt="Logo">
+                <div class="auth-mobile-logo-text">Sales <span>AganceOnline</span></div>
+            </div>
+
+            <!-- Registration success state -->
+            <div id="success-state" class="hidden">
+                <div class="auth-message-box success" style="margin-bottom: 24px;">
+                    <span class="auth-message-icon">✅</span>
+                    <div>
+                        <h3>Registration Successful!</h3>
+                        <p>Your account has been created and is awaiting Owner approval. You will be able to log in once your account is approved.</p>
+                    </div>
+                </div>
+                <a href="./login.html" class="btn btn-primary" style="display:flex; justify-content:center;">
+                    Back to Login
+                </a>
+            </div>
+
+            <!-- Registration form -->
+            <div id="register-form-wrap">
+                <div class="auth-form-header">
+                    <h1>Create Account</h1>
+                    <p>Fill in your details to register</p>
+                </div>
+
+                <form class="auth-form" id="register-form" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="full-name">Full Name</label>
+                        <div class="input-group">
+                            <span class="input-icon">👤</span>
+                            <input
+                                type="text"
+                                id="full-name"
+                                name="full_name"
+                                class="form-control"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+                        <span class="form-error hidden" id="name-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email Address</label>
+                        <div class="input-group">
+                            <span class="input-icon">✉️</span>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                class="form-control"
+                                placeholder="you@example.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+                        <span class="form-error hidden" id="email-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Phone Number</label>
+                        <div class="input-group">
+                            <span class="input-icon">📱</span>
+                            <input
+                                type="tel"
+                                id="phone"
+                                name="phone"
+                                class="form-control"
+                                placeholder="+1 (555) 000-0000"
+                                autocomplete="tel"
+                            >
+                        </div>
+                        <span class="form-error hidden" id="phone-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control has-right-icon"
+                                placeholder="Min. 8 characters"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <span class="input-icon-right" id="toggle-password">👁️</span>
+                        </div>
+                        <span class="form-error hidden" id="password-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="confirm-password">Confirm Password</label>
+                        <div class="input-group">
+                            <span class="input-icon">🔒</span>
+                            <input
+                                type="password"
+                                id="confirm-password"
+                                name="confirm_password"
+                                class="form-control has-right-icon"
+                                placeholder="Repeat your password"
+                                autocomplete="new-password"
+                                required
+                            >
+                            <span class="input-icon-right" id="toggle-confirm">👁️</span>
+                        </div>
+                        <span class="form-error hidden" id="confirm-error"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="register-btn">
+                        Create Account
+                    </button>
+                </form>
+
+                <div class="auth-link-row">
+                    <span>Already have an account?</span>
+                    <a href="./login.html" class="auth-link">Sign In</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script>
+(async () => {
+    // If already logged in, redirect
+    const session = await Auth.getSession();
+    if (session) {
+        window.location.replace('./index.html');
+        return;
+    }
+
+    // Toggle password fields
+    function setupToggle(toggleId, inputId) {
+        const btn = document.getElementById(toggleId);
+        const input = document.getElementById(inputId);
+        btn.addEventListener('click', () => {
+            const isText = input.type === 'text';
+            input.type = isText ? 'password' : 'text';
+            btn.textContent = isText ? '👁️' : '🙈';
+        });
+    }
+    setupToggle('toggle-password', 'password');
+    setupToggle('toggle-confirm', 'confirm-password');
+
+    // Form submission
+    const form = document.getElementById('register-form');
+    const registerBtn = document.getElementById('register-btn');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const fullName = document.getElementById('full-name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+
+        let hasError = false;
+
+        if (!fullName) { showFieldError('name-error', 'Full name is required'); hasError = true; }
+        if (!email || !isValidEmail(email)) { showFieldError('email-error', 'Valid email is required'); hasError = true; }
+        if (!password || password.length < 8) { showFieldError('password-error', 'Password must be at least 8 characters'); hasError = true; }
+        if (password !== confirmPassword) { showFieldError('confirm-error', 'Passwords do not match'); hasError = true; }
+        if (hasError) return;
+
+        UI.setButtonLoading(registerBtn, true, 'Creating Account...');
+
+        try {
+            await Auth.register(fullName, email, phone, password);
+
+            // Supabase auto-logs in after registration. Sign out immediately to prevent redirect loop.
+            const client = getSupabaseClient();
+            if (client) await client.auth.signOut();
+
+            // Show success state
+            document.getElementById('register-form-wrap').classList.add('hidden');
+            document.getElementById('success-state').classList.remove('hidden');
+
+        } catch (err) {
+            let msg = err.message || 'Registration failed. Please try again.';
+            if (msg.includes('already registered') || msg.includes('already exists')) {
+                msg = 'This email is already registered. Please sign in instead.';
+            }
+            UI.showError(msg);
+        } finally {
+            UI.setButtonLoading(registerBtn, false, 'Create Account');
+        }
+    });
+
+    function clearErrors() {
+        document.querySelectorAll('.form-error').forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+        });
+    }
+
+    function showFieldError(id, msg) {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+    }
+
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+})();
+</script>
+
+</body>
+</html>

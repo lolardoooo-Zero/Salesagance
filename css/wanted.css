@@ -1,0 +1,168 @@
+/* ============================================================
+   WANTED CARS CSS - Sales AganceOnline
+   ============================================================ */
+
+@import './global.css';
+
+/* ============================================================
+   WANTED CARDS GRID
+   ============================================================ */
+.wanted-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: var(--space-lg);
+}
+
+/* ============================================================
+   WANTED CARD
+   ============================================================ */
+.wanted-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    cursor: pointer;
+    transition: all var(--transition-slow);
+    position: relative;
+}
+
+.wanted-card:hover {
+    border-color: var(--color-red);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 30px rgba(192,0,0,0.1);
+}
+
+/* Priority accent bar */
+.wanted-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+}
+.wanted-card.priority-urgent::before { background: var(--color-red); }
+.wanted-card.priority-high::before   { background: var(--color-danger); }
+.wanted-card.priority-medium::before { background: var(--color-warning); }
+.wanted-card.priority-low::before    { background: var(--color-info); }
+
+.wanted-card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-sm);
+    padding: var(--space-lg) var(--space-lg) var(--space-sm);
+}
+
+.wanted-card-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-md);
+    background: var(--color-red-subtle);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    border: 1px solid rgba(192,0,0,0.2);
+}
+
+.wanted-card-badges {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.wanted-card-title {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-white);
+    line-height: 1.2;
+    padding: 0 var(--space-lg);
+    margin-bottom: var(--space-xs);
+}
+
+.wanted-card-subtitle {
+    color: var(--color-muted);
+    font-size: 0.875rem;
+    padding: 0 var(--space-lg);
+}
+
+.wanted-card-specs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-xs);
+    padding: var(--space-md) var(--space-lg);
+}
+
+.wanted-spec {
+    background: var(--color-surface-2);
+    border-radius: var(--radius-md);
+    padding: var(--space-sm) var(--space-md);
+}
+
+.wanted-spec-label {
+    font-size: 0.6875rem;
+    color: var(--color-muted);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.wanted-spec-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-off-white);
+}
+
+.wanted-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--space-md) var(--space-lg);
+    border-top: 1px solid var(--color-border);
+    gap: var(--space-sm);
+}
+
+.wanted-card-date {
+    font-size: 0.75rem;
+    color: var(--color-muted);
+}
+
+.wanted-card-actions {
+    display: flex;
+    gap: var(--space-sm);
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+.wanted-card:hover .wanted-card-actions {
+    opacity: 1;
+}
+
+/* ============================================================
+   WANTED FORM
+   ============================================================ */
+.wanted-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-md);
+}
+
+.wanted-form-full {
+    grid-column: 1 / -1;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px) {
+    .wanted-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .wanted-form-grid {
+        grid-template-columns: 1fr;
+    }
+}

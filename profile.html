@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - My Profile. View and edit your account information.">
+    <title>My Profile – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/profile.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="./logo.jpg" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand-text">Sales <span>AganceOnline</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Main</span>
+            <a href="./index.html" class="nav-link"><span class="nav-icon">📊</span>Dashboard</a>
+            <a href="./cars.html" class="nav-link"><span class="nav-icon">🚗</span>Cars Inventory</a>
+            <a href="./wanted.html" class="nav-link"><span class="nav-icon">🔍</span>Wanted Cars</a>
+            <span class="nav-section-label" data-role="owner">Management</span>
+            <a href="./users.html" class="nav-link" data-role="owner"><span class="nav-icon">👥</span>Users</a>
+            <span class="nav-section-label">Account</span>
+            <a href="./profile.html" class="nav-link"><span class="nav-icon">👤</span>Profile</a>
+            <a href="#" class="nav-link" id="logout-btn"><span class="nav-icon">🚪</span>Logout</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="app-main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle" id="sidebar-toggle">☰</button>
+                <h2 class="topbar-title">My Profile</h2>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <div class="profile-layout">
+
+                <!-- Profile Header Card -->
+                <div class="profile-header-card" id="profile-header">
+                    <div class="loader-spinner" style="width:28px;height:28px;border-width:2px;margin:0 auto;"></div>
+                </div>
+
+                <!-- Account Info -->
+                <div class="profile-section">
+                    <div class="profile-section-header">
+                        <h2>Account Information</h2>
+                    </div>
+                    <div class="profile-section-body">
+                        <div class="profile-info-grid" id="profile-info-grid">
+                            <div class="loader-spinner" style="width:20px;height:20px;border-width:2px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Profile -->
+                <div class="profile-section">
+                    <div class="profile-section-header">
+                        <h2>✏️ Edit Profile</h2>
+                    </div>
+                    <div class="profile-section-body">
+                        <form class="profile-edit-form" id="edit-profile-form" novalidate>
+                            <div class="form-group">
+                                <label class="form-label">Full Name</label>
+                                <input type="text" id="edit-name" class="form-control" placeholder="Your full name">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" id="edit-phone" class="form-control" placeholder="+1 (555) 000-0000">
+                            </div>
+                            <div style="display:flex;justify-content:flex-end;">
+                                <button type="submit" class="btn btn-primary" id="save-profile-btn">
+                                    💾 Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="profile-section">
+                    <div class="profile-section-header">
+                        <h2 style="color: var(--color-danger);">⚠️ Session</h2>
+                    </div>
+                    <div class="profile-section-body">
+                        <p class="text-muted" style="margin-bottom: 16px;">Sign out of your account on this device.</p>
+                        <button class="btn btn-danger" id="sign-out-btn">🚪 Sign Out</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script src="./js/realtime.js"></script>
+<script src="./js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Wanted Cars. View and manage the company's wanted car requests.">
+    <title>Wanted Cars – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/wanted.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="./logo.jpg" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand-text">Sales <span>AganceOnline</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Main</span>
+            <a href="./index.html" class="nav-link"><span class="nav-icon">📊</span>Dashboard</a>
+            <a href="./cars.html" class="nav-link"><span class="nav-icon">🚗</span>Cars Inventory</a>
+            <a href="./wanted.html" class="nav-link"><span class="nav-icon">🔍</span>Wanted Cars</a>
+            <span class="nav-section-label" data-role="owner">Management</span>
+            <a href="./users.html" class="nav-link" data-role="owner"><span class="nav-icon">👥</span>Users</a>
+            <span class="nav-section-label">Account</span>
+            <a href="./profile.html" class="nav-link"><span class="nav-icon">👤</span>Profile</a>
+            <a href="#" class="nav-link" id="logout-btn"><span class="nav-icon">🚪</span>Logout</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user" onclick="window.location.href='./profile.html'">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="app-main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle" id="sidebar-toggle">☰</button>
+                <h2 class="topbar-title">Wanted Cars</h2>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-primary" id="add-wanted-btn" data-role="owner" style="display:none;">
+                    ＋ Add Request
+                </button>
+            </div>
+        </header>
+
+        <div class="page-content">
+            <!-- Filter bar -->
+            <div class="filter-bar">
+                <div class="search-bar" style="max-width: 300px;">
+                    <span class="search-bar-icon">🔍</span>
+                    <input type="text" id="search-input" placeholder="Search brand, model...">
+                </div>
+                <div class="filter-group">
+                    <select class="form-control" id="filter-status" style="width:auto;">
+                        <option value="">All Status</option>
+                        <option value="active">Active</option>
+                        <option value="found">Found</option>
+                        <option value="closed">Closed</option>
+                    </select>
+                    <select class="form-control" id="filter-priority" style="width:auto;">
+                        <option value="">All Priority</option>
+                        <option value="urgent">🔥 Urgent</option>
+                        <option value="high">High</option>
+                        <option value="medium">Medium</option>
+                        <option value="low">Low</option>
+                    </select>
+                    <button class="btn btn-outline btn-sm" id="clear-filters">✕ Clear</button>
+                </div>
+                <span class="text-muted text-sm" id="results-count" style="margin-left:auto;"></span>
+            </div>
+
+            <!-- Wanted Grid -->
+            <div id="wanted-grid" class="wanted-grid">
+                <div style="grid-column:1/-1;display:flex;justify-content:center;padding:60px;">
+                    <div class="loader-spinner" style="width:40px;height:40px;border-width:3px;"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- ============================================================
+   WANTED DETAIL MODAL
+   ============================================================ -->
+<div class="modal-overlay" id="wanted-detail-modal">
+    <div class="modal modal-lg">
+        <div class="modal-header">
+            <h2 id="wanted-detail-heading">Wanted Car Details</h2>
+            <button class="btn btn-ghost btn-sm" data-close-modal="wanted-detail-modal">✕ Close</button>
+        </div>
+        <div class="modal-body" id="wanted-detail-body"></div>
+        <div class="modal-footer" id="wanted-detail-footer">
+            <button class="btn btn-outline" data-close-modal="wanted-detail-modal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+   ADD / EDIT WANTED FORM MODAL
+   ============================================================ -->
+<div class="modal-overlay" id="wanted-form-modal">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="wanted-form-title">Add Wanted Car</h2>
+            <button class="btn btn-ghost btn-sm" data-close-modal="wanted-form-modal">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="wanted-form" novalidate>
+                <input type="hidden" id="wanted-id">
+                <div class="wanted-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Brand *</label>
+                        <input type="text" id="wf-brand" class="form-control" placeholder="e.g. Toyota" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Model *</label>
+                        <input type="text" id="wf-model" class="form-control" placeholder="e.g. Land Cruiser" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Min Year</label>
+                        <input type="number" id="wf-min-year" class="form-control" placeholder="2015" min="1900">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Year</label>
+                        <input type="number" id="wf-max-year" class="form-control" placeholder="2024" max="2100">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Min Budget</label>
+                        <input type="number" id="wf-min-budget" class="form-control" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Budget</label>
+                        <input type="number" id="wf-max-budget" class="form-control" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Preferred Color</label>
+                        <input type="text" id="wf-color" class="form-control" placeholder="Any color">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Max Mileage (km)</label>
+                        <input type="number" id="wf-max-mileage" class="form-control" placeholder="200000">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Transmission</label>
+                        <select id="wf-transmission" class="form-control">
+                            <option value="">Any</option>
+                            <option value="automatic">Automatic</option>
+                            <option value="manual">Manual</option>
+                            <option value="cvt">CVT</option>
+                            <option value="dct">DCT</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fuel Type</label>
+                        <select id="wf-fuel" class="form-control">
+                            <option value="">Any</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                            <option value="electric">Electric</option>
+                            <option value="hybrid">Hybrid</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" id="wf-location" class="form-control" placeholder="City or region">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Quantity</label>
+                        <input type="number" id="wf-quantity" class="form-control" value="1" min="1">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Priority *</label>
+                        <select id="wf-priority" class="form-control" required>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                            <option value="high">High</option>
+                            <option value="urgent">🔥 Urgent</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Status</label>
+                        <select id="wf-status" class="form-control">
+                            <option value="active">Active</option>
+                            <option value="found">Found</option>
+                            <option value="closed">Closed</option>
+                        </select>
+                    </div>
+                    <div class="form-group wanted-form-full">
+                        <label class="form-label">Description / Notes</label>
+                        <textarea id="wf-description" class="form-control" rows="3" placeholder="Additional requirements or notes..."></textarea>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-close-modal="wanted-form-modal">Cancel</button>
+            <button class="btn btn-primary" id="save-wanted-btn">💾 Save Request</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script src="./js/realtime.js"></script>
+<script src="./js/wanted.js"></script>
+</body>
+</html>

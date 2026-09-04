@@ -1,0 +1,143 @@
+/* ============================================================
+   USERS MANAGEMENT CSS - Sales AganceOnline
+   ============================================================ */
+
+@import './global.css';
+
+/* ============================================================
+   USER TABLE ENHANCEMENTS
+   ============================================================ */
+.user-table-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-red-subtle);
+    border: 2px solid rgba(192,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--color-red);
+    flex-shrink: 0;
+}
+
+.user-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+}
+
+.user-cell-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-cell-name {
+    font-weight: 600;
+    font-size: 0.9375rem;
+}
+
+.user-cell-email {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+}
+
+/* Actions dropdown */
+.action-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.action-menu-list {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    margin-top: 4px;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border-2);
+    border-radius: var(--radius-md);
+    min-width: 180px;
+    z-index: 50;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    display: none;
+}
+
+.action-menu.open .action-menu-list {
+    display: block;
+}
+
+.action-menu-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding: 10px var(--space-md);
+    font-size: 0.875rem;
+    color: var(--color-off-white);
+    cursor: pointer;
+    transition: background var(--transition);
+    border: none;
+    background: none;
+    width: 100%;
+    text-align: left;
+}
+
+.action-menu-item:hover {
+    background: var(--color-surface-3);
+}
+
+.action-menu-item.danger {
+    color: var(--color-danger);
+}
+
+.action-menu-item.success {
+    color: var(--color-success);
+}
+
+.action-menu-separator {
+    height: 1px;
+    background: var(--color-border);
+    margin: 4px 0;
+}
+
+/* Stats bar */
+.users-stats {
+    display: flex;
+    gap: var(--space-md);
+    margin-bottom: var(--space-lg);
+    flex-wrap: wrap;
+}
+
+.users-stat-pill {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    padding: 6px 16px;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+}
+
+.users-stat-pill strong {
+    color: var(--color-white);
+}
+
+/* Pending highlight */
+.table tbody tr.pending-row td:first-child {
+    border-left: 3px solid var(--color-warning);
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 900px) {
+    .table th:nth-child(3),
+    .table td:nth-child(3),
+    .table th:nth-child(6),
+    .table td:nth-child(6) {
+        display: none;
+    }
+}

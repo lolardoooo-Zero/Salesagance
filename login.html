@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Internal automotive sales management platform. Login to your account.">
+    <title>Login – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/auth.css">
+</head>
+<body>
+
+<div class="auth-page">
+
+    <!-- Left: Brand Panel -->
+    <div class="auth-brand">
+        <div class="auth-brand-inner">
+            <div class="auth-logo-wrap">
+                <img src="./logo.jpg" alt="Sales AganceOnline Logo">
+            </div>
+            <div>
+                <div class="auth-brand-tagline">
+                    Sales<br><span>AganceOnline</span>
+                </div>
+            </div>
+            <p class="auth-brand-description">
+                The professional internal platform for automotive sales teams. Manage inventory, track leads, and grow your dealership.
+            </p>
+            <div class="auth-brand-stats">
+                <div class="auth-stat">
+                    <span class="auth-stat-value">100%</span>
+                    <span class="auth-stat-label">Secure</span>
+                </div>
+                <div class="auth-stat">
+                    <span class="auth-stat-value">Real-time</span>
+                    <span class="auth-stat-label">Updates</span>
+                </div>
+                <div class="auth-stat">
+                    <span class="auth-stat-value">24/7</span>
+                    <span class="auth-stat-label">Access</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right: Form Panel -->
+    <div class="auth-form-panel">
+        <div class="auth-form-wrap">
+
+            <!-- Mobile logo -->
+            <div class="auth-mobile-logo">
+                <img src="./logo.jpg" alt="Logo">
+                <div class="auth-mobile-logo-text">Sales <span>AganceOnline</span></div>
+            </div>
+
+            <div class="auth-form-header">
+                <h1>Welcome Back</h1>
+                <p>Sign in to your account to continue</p>
+            </div>
+
+            <!-- Status message (shown dynamically) -->
+            <div id="status-message" class="hidden" style="margin-bottom: 20px;"></div>
+
+            <!-- Login Form -->
+            <form class="auth-form" id="login-form" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="email">Email Address</label>
+                    <div class="input-group">
+                        <span class="input-icon">✉️</span>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            class="form-control"
+                            placeholder="you@example.com"
+                            autocomplete="email"
+                            required
+                        >
+                    </div>
+                    <span class="form-error hidden" id="email-error"></span>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Password</label>
+                    <div class="input-group">
+                        <span class="input-icon">🔒</span>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            class="form-control has-right-icon"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+                        <span class="input-icon-right" id="toggle-password" title="Show/Hide password">👁️</span>
+                    </div>
+                    <span class="form-error hidden" id="password-error"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary" id="login-btn">
+                    Sign In
+                </button>
+            </form>
+
+            <div class="auth-link-row">
+                <span>Don't have an account?</span>
+                <a href="./register.html" class="auth-link">Register</a>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script>
+(async () => {
+    // If already logged in, redirect to dashboard if approved
+    (async () => {
+        const session = await Auth.getSession();
+        if (session) {
+            const profile = await Auth.getUserProfile();
+            if (profile && profile.status === 'approved') {
+                window.location.replace('./index.html');
+                return;
+            } else if (!profile) {
+                // Zombie session. Clear it so the user can register normally.
+                const client = getSupabaseClient();
+                if (client) await client.auth.signOut();
+            }
+        }
+    })();
+
+    // Toggle password visibility
+    const toggleBtn = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    toggleBtn.addEventListener('click', () => {
+        const isText = passwordInput.type === 'text';
+        passwordInput.type = isText ? 'password' : 'text';
+        toggleBtn.textContent = isText ? '👁️' : '🙈';
+    });
+
+    // Form submission
+    const form = document.getElementById('login-form');
+    const loginBtn = document.getElementById('login-btn');
+    const statusMsg = document.getElementById('status-message');
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        clearErrors();
+
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        // Basic validation
+        let hasError = false;
+        if (!email) { showFieldError('email-error', 'Email is required'); hasError = true; }
+        if (!password) { showFieldError('password-error', 'Password is required'); hasError = true; }
+        if (hasError) return;
+
+        UI.setButtonLoading(loginBtn, true, 'Signing In...');
+        statusMsg.classList.add('hidden');
+
+        try {
+            await Auth.login(email, password);
+            const profile = await Auth.getUserProfile();
+
+            if (!profile) {
+                throw new Error('Could not load profile. Please try again.');
+            }
+
+            switch (profile.status) {
+                case 'approved':
+                    UI.showSuccess('Welcome back, ' + profile.full_name + '!');
+                    setTimeout(() => window.location.replace('./index.html'), 800);
+                    break;
+                case 'pending':
+                    showStatusMessage('pending',
+                        'Account Pending Approval',
+                        'Your account is waiting for Owner approval. You will be able to access the dashboard once approved.'
+                    );
+                    await Auth.logout();
+                    break;
+                case 'rejected':
+                    showStatusMessage('rejected',
+                        'Account Rejected',
+                        'Your account registration has been rejected. Please contact your team Owner.'
+                    );
+                    await Auth.logout();
+                    break;
+                case 'suspended':
+                    showStatusMessage('rejected',
+                        'Account Suspended',
+                        'Your account has been suspended. Please contact your team Owner for assistance.'
+                    );
+                    await Auth.logout();
+                    break;
+                default:
+                    throw new Error('Unknown account status. Please contact support.');
+            }
+        } catch (err) {
+            let msg = err.message || 'Login failed. Please try again.';
+            if (msg.includes('Invalid login credentials')) {
+                msg = 'Invalid email or password. Please try again.';
+            }
+            UI.showError(msg);
+        } finally {
+            UI.setButtonLoading(loginBtn, false, 'Sign In');
+        }
+    });
+
+    function clearErrors() {
+        document.querySelectorAll('.form-error').forEach(el => {
+            el.classList.add('hidden');
+            el.textContent = '';
+        });
+    }
+
+    function showFieldError(id, msg) {
+        const el = document.getElementById(id);
+        if (el) { el.textContent = msg; el.classList.remove('hidden'); }
+    }
+
+    function showStatusMessage(type, title, message) {
+        statusMsg.className = `auth-message-box ${type}`;
+        statusMsg.innerHTML = `
+            <span class="auth-message-icon">${type === 'pending' ? '⏳' : '❌'}</span>
+            <div>
+                <h3>${title}</h3>
+                <p>${message}</p>
+            </div>
+        `;
+        statusMsg.classList.remove('hidden');
+        UI.setButtonLoading(loginBtn, false, 'Sign In');
+    }
+})();
+</script>
+
+</body>
+</html>
