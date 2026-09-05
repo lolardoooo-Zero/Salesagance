@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Activity Logs. Owner-only audit trail of all system events.">
+    <title>Activity Logs – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/logs.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar (Owner only sees this page) -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="./logo.jpg" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand-text">Sales <span>AganceOnline</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Main</span>
+            <a href="./index.html" class="nav-link"><span class="nav-icon">📊</span>Dashboard</a>
+            <a href="./cars.html" class="nav-link"><span class="nav-icon">🚗</span>Cars Inventory</a>
+            <a href="./cars-for-sale.html" class="nav-link"><span class="nav-icon">🏷️</span>Cars for Sale</a>
+            <a href="./wanted.html" class="nav-link"><span class="nav-icon">🔍</span>Wanted Cars</a>
+            <span class="nav-section-label" data-role="owner">Management</span>
+            <a href="./users.html" class="nav-link" data-role="owner"><span class="nav-icon">👥</span>Users</a>
+            <a href="./logs.html" class="nav-link" data-role="owner"><span class="nav-icon">📋</span>Logs</a>
+            <span class="nav-section-label">Account</span>
+            <a href="./profile.html" class="nav-link"><span class="nav-icon">👤</span>Profile</a>
+            <a href="#" class="nav-link" id="logout-btn"><span class="nav-icon">🚪</span>Logout</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user" onclick="window.location.href='./profile.html'">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="app-main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle" id="sidebar-toggle">☰</button>
+                <h2 class="topbar-title">Activity Logs</h2>
+            </div>
+            <div class="topbar-right">
+                <button class="btn btn-outline btn-sm" id="export-csv-btn">📥 Export CSV</button>
+            </div>
+        </header>
+
+        <div class="page-content">
+
+            <!-- Stats Strip -->
+            <div class="logs-stats-strip">
+                <div class="logs-stat-card">
+                    <div class="logs-stat-icon">📋</div>
+                    <div class="logs-stat-value" id="stat-total-logs">—</div>
+                    <div class="logs-stat-label">Total Logs</div>
+                </div>
+                <div class="logs-stat-card">
+                    <div class="logs-stat-icon">📅</div>
+                    <div class="logs-stat-value" id="stat-today-logs">—</div>
+                    <div class="logs-stat-label">Today</div>
+                </div>
+                <div class="logs-stat-card">
+                    <div class="logs-stat-icon">⚡</div>
+                    <div class="logs-stat-value" id="stat-unique-actions">—</div>
+                    <div class="logs-stat-label">Unique Actions</div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="logs-filter-panel">
+                <div class="logs-filter-group" style="flex: 2; min-width: 220px;">
+                    <label>Search</label>
+                    <div class="search-bar">
+                        <span class="search-bar-icon">🔍</span>
+                        <input type="text" id="log-search" placeholder="User name, action, description...">
+                    </div>
+                </div>
+                <div class="logs-filter-group">
+                    <label>Action Type</label>
+                    <select class="form-control" id="log-filter-action">
+                        <option value="">All Actions</option>
+                        <optgroup label="Authentication">
+                            <option value="login">Login</option>
+                            <option value="logout">Logout</option>
+                            <option value="register">Register</option>
+                        </optgroup>
+                        <optgroup label="Users">
+                            <option value="user_approved">User Approved</option>
+                            <option value="user_rejected">User Rejected</option>
+                            <option value="user_suspended">User Suspended</option>
+                            <option value="role_changed">Role Changed</option>
+                        </optgroup>
+                        <optgroup label="Cars Inventory">
+                            <option value="car_added">Car Added</option>
+                            <option value="car_edited">Car Edited</option>
+                            <option value="car_deleted">Car Deleted</option>
+                            <option value="car_status_changed">Status Changed</option>
+                            <option value="image_added">Image Added</option>
+                            <option value="image_removed">Image Removed</option>
+                            <option value="inspection_uploaded">Inspection Uploaded</option>
+                            <option value="inspection_replaced">Inspection Replaced</option>
+                            <option value="inspection_removed">Inspection Removed</option>
+                        </optgroup>
+                        <optgroup label="Wanted Cars">
+                            <option value="wanted_added">Wanted Added</option>
+                            <option value="wanted_edited">Wanted Edited</option>
+                            <option value="wanted_deleted">Wanted Deleted</option>
+                        </optgroup>
+                        <optgroup label="Cars for Sale">
+                            <option value="submission_added">Submission Added</option>
+                            <option value="submission_edited">Submission Edited</option>
+                            <option value="submission_approved">Submission Approved</option>
+                            <option value="submission_rejected">Submission Rejected</option>
+                            <option value="submission_not_interested">Not Interested</option>
+                            <option value="offer_price_changed">Offer Price Changed</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <div class="logs-filter-group">
+                    <label>Role</label>
+                    <select class="form-control" id="log-filter-role">
+                        <option value="">All Roles</option>
+                        <option value="owner">Owner</option>
+                        <option value="sales">Sales</option>
+                    </select>
+                </div>
+                <div class="logs-filter-group">
+                    <label>From Date</label>
+                    <input type="date" id="log-date-from" class="form-control">
+                </div>
+                <div class="logs-filter-group">
+                    <label>To Date</label>
+                    <input type="date" id="log-date-to" class="form-control">
+                </div>
+                <div class="logs-filter-actions">
+                    <button class="btn btn-outline btn-sm" id="clear-log-filters">✕ Clear</button>
+                </div>
+            </div>
+
+            <!-- Results bar -->
+            <div class="logs-results-bar">
+                <span class="text-muted text-sm" id="log-results-count"></span>
+            </div>
+
+            <!-- Table -->
+            <div class="logs-table-wrapper">
+                <table class="logs-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>User</th>
+                            <th>Action</th>
+                            <th>Description</th>
+                            <th>Changes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-table-body">
+                        <tr>
+                            <td colspan="6" style="text-align:center;padding:60px;">
+                                <div class="loader-spinner" style="width:36px;height:36px;border-width:3px;margin:0 auto;"></div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- Pagination -->
+                <div class="logs-pagination">
+                    <button class="btn btn-outline btn-sm" id="page-prev">← Prev</button>
+                    <span id="page-info">Page 1 of 1</span>
+                    <button class="btn btn-outline btn-sm" id="page-next">Next →</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script src="./js/realtime.js"></script>
+<script src="./js/logs.js"></script>
+</body>
+</html>

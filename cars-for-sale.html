@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sales AganceOnline - Cars for Sale. Submit and review car sale opportunities.">
+    <title>Cars for Sale – Sales AganceOnline</title>
+    <link rel="icon" type="image/jpeg" href="./logo.jpg">
+    <link rel="stylesheet" href="./css/dashboard.css">
+    <link rel="stylesheet" href="./css/cars-for-sale.css">
+</head>
+<body>
+
+<div class="app-layout">
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <img src="./logo.jpg" alt="Logo" class="sidebar-logo">
+            <div class="sidebar-brand-text">Sales <span>AganceOnline</span></div>
+        </div>
+        <nav class="sidebar-nav">
+            <span class="nav-section-label">Main</span>
+            <a href="./index.html" class="nav-link"><span class="nav-icon">📊</span>Dashboard</a>
+            <a href="./cars.html" class="nav-link"><span class="nav-icon">🚗</span>Cars Inventory</a>
+            <a href="./cars-for-sale.html" class="nav-link"><span class="nav-icon">🏷️</span>Cars for Sale</a>
+            <a href="./wanted.html" class="nav-link"><span class="nav-icon">🔍</span>Wanted Cars</a>
+            <span class="nav-section-label" data-role="owner">Management</span>
+            <a href="./users.html" class="nav-link" data-role="owner"><span class="nav-icon">👥</span>Users</a>
+            <a href="./logs.html" class="nav-link" data-role="owner"><span class="nav-icon">📋</span>Logs</a>
+            <span class="nav-section-label">Account</span>
+            <a href="./profile.html" class="nav-link"><span class="nav-icon">👤</span>Profile</a>
+            <a href="#" class="nav-link" id="logout-btn"><span class="nav-icon">🚪</span>Logout</a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user" onclick="window.location.href='./profile.html'">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-info">
+                    <div class="user-name" data-user-name>Loading...</div>
+                    <div class="user-role" data-user-role>...</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="app-main">
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="topbar-toggle" id="sidebar-toggle">☰</button>
+                <h2 class="topbar-title">Cars for Sale</h2>
+            </div>
+            <div class="topbar-right cfs-header-actions">
+                <button class="btn btn-primary" id="add-submission-btn">
+                    ＋ Submit Car
+                </button>
+            </div>
+        </header>
+
+        <div class="page-content">
+
+            <!-- Filter Bar -->
+            <div class="cfs-filter-bar">
+                <div class="search-bar" style="max-width: 280px; flex: 1;">
+                    <span class="search-bar-icon">🔍</span>
+                    <input type="text" id="cfs-search" placeholder="Brand, model, submitter...">
+                </div>
+                <select class="form-control" id="cfs-filter-status" style="width: auto;">
+                    <option value="">All Statuses</option>
+                    <option value="pending">Pending</option>
+                    <option value="approved">Approved</option>
+                    <option value="rejected">Rejected</option>
+                    <option value="not_interested">Not Interested</option>
+                </select>
+                <!-- Owner only: filter by submitter -->
+                <select class="form-control" id="cfs-filter-user" style="width: auto;" data-role="owner">
+                    <option value="">All Users</option>
+                </select>
+                <button class="btn btn-outline btn-sm" id="cfs-clear-filters">✕ Clear</button>
+                <span class="text-muted text-sm" id="cfs-results-count" style="margin-left: auto;"></span>
+            </div>
+
+            <!-- Cards Grid -->
+            <div class="cfs-grid" id="cfs-grid">
+                <div style="grid-column:1/-1; display:flex; justify-content:center; padding:60px;">
+                    <div class="loader-spinner" style="width:40px;height:40px;border-width:3px;"></div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+
+<!-- ============================================================
+     SUBMISSION FORM MODAL (Add / Edit)
+     ============================================================ -->
+<div class="modal-overlay" id="cfs-form-modal">
+    <div class="modal modal-lg">
+        <div class="modal-header">
+            <h2 id="cfs-form-title">Submit Car for Sale</h2>
+            <button class="btn btn-ghost btn-sm" data-close-modal="cfs-form-modal">✕</button>
+        </div>
+        <div class="modal-body">
+            <form id="cfs-form" novalidate>
+                <input type="hidden" id="cfs-id">
+                <div class="cfs-form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Brand *</label>
+                        <input type="text" id="cfs-brand" class="form-control" placeholder="e.g. Toyota" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Model *</label>
+                        <input type="text" id="cfs-model" class="form-control" placeholder="e.g. Camry" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Year *</label>
+                        <input type="number" id="cfs-year" class="form-control" placeholder="2023" min="1900" max="2100" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Trim</label>
+                        <input type="text" id="cfs-trim" class="form-control" placeholder="e.g. Sport, VXR">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Color</label>
+                        <input type="text" id="cfs-color" class="form-control" placeholder="e.g. Pearl White">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mileage (km)</label>
+                        <input type="number" id="cfs-mileage" class="form-control" placeholder="0" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Transmission</label>
+                        <select id="cfs-transmission" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="automatic">Automatic</option>
+                            <option value="manual">Manual</option>
+                            <option value="cvt">CVT</option>
+                            <option value="dct">DCT</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Fuel Type</label>
+                        <select id="cfs-fuel" class="form-control">
+                            <option value="">Select...</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                            <option value="electric">Electric</option>
+                            <option value="hybrid">Hybrid</option>
+                            <option value="plug-in hybrid">Plug-in Hybrid</option>
+                            <option value="lpg">LPG</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Engine</label>
+                        <input type="text" id="cfs-engine" class="form-control" placeholder="e.g. 2.0L Turbo">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Asking Price (EGP) *</label>
+                        <input type="number" id="cfs-price" class="form-control" placeholder="0" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Location</label>
+                        <input type="text" id="cfs-location" class="form-control" placeholder="City or area">
+                    </div>
+                    <div class="form-group cfs-form-full">
+                        <label class="form-label">Description</label>
+                        <textarea id="cfs-description" class="form-control" rows="3" placeholder="Describe the car condition, history, extras..."></textarea>
+                    </div>
+                    <div class="form-group cfs-form-full">
+                        <label class="form-label">Seller Notes</label>
+                        <textarea id="cfs-seller-notes" class="form-control" rows="2" placeholder="Any additional notes for the owner..."></textarea>
+                    </div>
+                    <!-- Image Upload -->
+                    <div class="cfs-form-full">
+                        <label class="form-label" style="margin-bottom: 8px; display:block;">Car Images</label>
+                        <div class="image-upload-area" id="cfs-upload-area">
+                            <input type="file" id="cfs-images-input" accept="image/*" multiple>
+                            <div class="upload-icon">📷</div>
+                            <p style="font-weight:600;">Click or drag images here</p>
+                            <p class="text-muted text-sm">JPG, PNG, WEBP — Multiple files supported</p>
+                        </div>
+                        <div class="image-preview-list" id="cfs-image-preview"></div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline" data-close-modal="cfs-form-modal">Cancel</button>
+            <button class="btn btn-primary" id="cfs-save-btn">📤 Submit Car</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     REVIEW MODAL (Owner)
+     ============================================================ -->
+<div class="modal-overlay" id="cfs-review-modal">
+    <div class="modal modal-xl">
+        <div class="modal-header">
+            <h2 id="review-modal-title">Review Submission</h2>
+            <button class="btn btn-ghost btn-sm" data-close-modal="cfs-review-modal">✕ Close</button>
+        </div>
+        <div class="modal-body">
+            <div class="review-modal-grid" id="review-modal-body">
+                <!-- Populated dynamically -->
+            </div>
+        </div>
+        <div class="modal-footer" id="review-modal-footer">
+            <button class="btn btn-outline" data-close-modal="cfs-review-modal">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="./config/supabase-config.js"></script>
+<script src="./js/supabase-client.js"></script>
+<script src="./js/auth.js"></script>
+<script src="./js/guards.js"></script>
+<script src="./js/ui-helpers.js"></script>
+<script src="./js/realtime.js"></script>
+<script src="./js/logs.js"></script>
+<script src="./js/cars-for-sale.js"></script>
+</body>
+</html>

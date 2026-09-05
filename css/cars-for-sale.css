@@ -1,0 +1,363 @@
+/* ============================================================
+   CARS FOR SALE — Sales AganceOnline
+   Submission pipeline: Sales submit, Owner reviews
+   ============================================================ */
+
+/* ============================================================
+   PAGE HEADER ACTIONS
+   ============================================================ */
+.cfs-header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* ============================================================
+   FILTER BAR
+   ============================================================ */
+.cfs-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+}
+
+/* ============================================================
+   SUBMISSION GRID
+   ============================================================ */
+.cfs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* ============================================================
+   SUBMISSION CARD
+   ============================================================ */
+.cfs-card {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+}
+
+.cfs-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-accent);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ── Card Image ── */
+.cfs-card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+    background: #111;
+    flex-shrink: 0;
+}
+
+.cfs-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.cfs-card:hover .cfs-card-image img {
+    transform: scale(1.04);
+}
+
+.cfs-card-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--color-border);
+}
+
+.cfs-card-status-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+}
+
+.cfs-card-img-count {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.75);
+    color: #fff;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
+}
+
+/* ── Card Body ── */
+.cfs-card-body {
+    padding: 16px 18px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.cfs-card-brand {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+}
+
+.cfs-card-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-text);
+    line-height: 1.3;
+}
+
+.cfs-card-year {
+    color: var(--color-muted);
+    font-weight: 400;
+}
+
+.cfs-card-submitter {
+    font-size: 0.8125rem;
+    color: var(--color-muted);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.cfs-card-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.cfs-card-spec {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 3px 8px;
+}
+
+/* ── Card Footer ── */
+.cfs-card-footer {
+    padding: 12px 18px;
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.cfs-seller-price {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.cfs-offer-price {
+    font-size: 0.8125rem;
+    color: var(--color-accent);
+    font-weight: 600;
+}
+
+.cfs-card-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ============================================================
+   STATUS BADGES — Sale Submissions
+   ============================================================ */
+.badge-pending       { background: rgba(234,179,8,0.15);  color: #eab308; border: 1px solid rgba(234,179,8,0.3); }
+.badge-approved      { background: rgba(34,197,94,0.15);  color: #22c55e; border: 1px solid rgba(34,197,94,0.3); }
+.badge-rejected      { background: rgba(239,68,68,0.15);  color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+.badge-not-interested { background: rgba(156,163,175,0.12); color: #9ca3af; border: 1px solid rgba(156,163,175,0.25); }
+
+/* ============================================================
+   SUBMISSION FORM MODAL
+   ============================================================ */
+.cfs-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.cfs-form-full {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+    .cfs-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   REVIEW MODAL (Owner)
+   ============================================================ */
+.review-modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+@media (max-width: 768px) {
+    .review-modal-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.review-gallery {
+    position: relative;
+}
+
+.review-gallery-main {
+    width: 100%;
+    height: 260px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    background: #111;
+    margin-bottom: 10px;
+}
+
+.review-gallery-main img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-gallery-thumbs {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.review-gallery-thumb {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color var(--transition-fast);
+    flex-shrink: 0;
+}
+
+.review-gallery-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-gallery-thumb.active,
+.review-gallery-thumb:hover {
+    border-color: var(--color-accent);
+}
+
+.review-specs-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.review-price-block {
+    background: rgba(var(--color-accent-rgb), 0.06);
+    border: 1px solid rgba(var(--color-accent-rgb), 0.2);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.review-price-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+}
+
+.review-price-value {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-text);
+}
+
+.review-offer-price {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-accent);
+}
+
+.review-owner-section {
+    background: var(--color-surface-2, rgba(255,255,255,0.04));
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px;
+}
+
+.review-owner-section-title {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.review-action-buttons {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.btn-approve  { background: #16a34a; color: #fff; border: none; }
+.btn-approve:hover { background: #15803d; }
+.btn-reject   { background: var(--color-danger); color: #fff; border: none; }
+.btn-reject:hover  { background: #b91c1c; }
+.btn-ni       { background: #374151; color: #d1d5db; border: 1px solid #4b5563; }
+.btn-ni:hover { background: #4b5563; }
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.cfs-empty {
+    grid-column: 1 / -1;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 640px) {
+    .cfs-grid {
+        grid-template-columns: 1fr;
+    }
+}

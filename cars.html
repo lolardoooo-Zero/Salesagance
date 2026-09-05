@@ -12,7 +12,6 @@
 <body>
 
 <div class="app-layout">
-
     <div class="sidebar-overlay" id="sidebar-overlay"></div>
 
     <!-- Sidebar -->
@@ -25,9 +24,11 @@
             <span class="nav-section-label">Main</span>
             <a href="./index.html" class="nav-link"><span class="nav-icon">📊</span>Dashboard</a>
             <a href="./cars.html" class="nav-link"><span class="nav-icon">🚗</span>Cars Inventory</a>
+            <a href="./cars-for-sale.html" class="nav-link"><span class="nav-icon">🏷️</span>Cars for Sale</a>
             <a href="./wanted.html" class="nav-link"><span class="nav-icon">🔍</span>Wanted Cars</a>
             <span class="nav-section-label" data-role="owner">Management</span>
             <a href="./users.html" class="nav-link" data-role="owner"><span class="nav-icon">👥</span>Users</a>
+            <a href="./logs.html" class="nav-link" data-role="owner"><span class="nav-icon">📋</span>Logs</a>
             <span class="nav-section-label">Account</span>
             <a href="./profile.html" class="nav-link"><span class="nav-icon">👤</span>Profile</a>
             <a href="#" class="nav-link" id="logout-btn"><span class="nav-icon">🚪</span>Logout</a>
@@ -51,7 +52,6 @@
                 <h2 class="topbar-title">Cars Inventory</h2>
             </div>
             <div class="topbar-right">
-                <!-- Owner only: Add car button -->
                 <button class="btn btn-primary" id="add-car-btn" data-role="owner" style="display:none;">
                     ＋ Add Car
                 </button>
@@ -59,38 +59,105 @@
         </header>
 
         <div class="page-content">
-            <!-- Filter bar -->
-            <div class="filter-bar">
-                <div class="search-bar" style="max-width: 320px;">
-                    <span class="search-bar-icon">🔍</span>
-                    <input type="text" id="search-input" placeholder="Search brand, model...">
+
+            <!-- ============================================================
+                 SEARCH & FILTERS
+                 ============================================================ -->
+            <div class="filter-panel" id="filter-panel">
+                <!-- Row 1: Main Search -->
+                <div class="filter-row filter-search-row">
+                    <div class="search-bar" style="flex:1; max-width:100%;">
+                        <span class="search-bar-icon">🔍</span>
+                        <input type="text" id="search-input" placeholder="Search brand, model, trim, location, VIN, year...">
+                    </div>
+                    <button class="btn btn-outline btn-sm filter-advanced-toggle" id="filter-toggle-btn">
+                        ⚙️ Filters <span class="filter-count-badge" id="filter-count" style="display:none;">0</span>
+                    </button>
+                    <select class="form-control" id="sort-select" style="width:auto; min-width:180px;">
+                        <option value="">Sort: Recently Added</option>
+                        <option value="price_asc">Price: Low → High</option>
+                        <option value="price_desc">Price: High → Low</option>
+                        <option value="year_desc">Year: Newest First</option>
+                        <option value="year_asc">Year: Oldest First</option>
+                        <option value="mileage_asc">Mileage: Low → High</option>
+                        <option value="mileage_desc">Mileage: High → Low</option>
+                    </select>
                 </div>
-                <div class="filter-group">
-                    <select class="form-control" id="filter-status" style="width:auto;">
-                        <option value="">All Status</option>
-                        <option value="available">Available</option>
-                        <option value="reserved">Reserved</option>
-                        <option value="sold">Sold</option>
-                        <option value="unavailable">Unavailable</option>
-                    </select>
-                    <select class="form-control" id="filter-transmission" style="width:auto;">
-                        <option value="">Transmission</option>
-                        <option value="automatic">Automatic</option>
-                        <option value="manual">Manual</option>
-                        <option value="cvt">CVT</option>
-                        <option value="dct">DCT</option>
-                    </select>
-                    <select class="form-control" id="filter-fuel" style="width:auto;">
-                        <option value="">Fuel Type</option>
-                        <option value="petrol">Petrol</option>
-                        <option value="diesel">Diesel</option>
-                        <option value="electric">Electric</option>
-                        <option value="hybrid">Hybrid</option>
-                        <option value="plug-in hybrid">Plug-in Hybrid</option>
-                    </select>
-                    <button class="btn btn-outline btn-sm" id="clear-filters">✕ Clear</button>
+
+                <!-- Advanced Filters (collapsible) -->
+                <div class="filter-advanced" id="filter-advanced" style="display:none;">
+                    <!-- Row 2: Categorical -->
+                    <div class="filter-row">
+                        <select class="form-control" id="filter-status">
+                            <option value="">All Status</option>
+                            <option value="available">Available</option>
+                            <option value="reserved">Reserved</option>
+                            <option value="sold">Sold</option>
+                            <option value="unavailable">Unavailable</option>
+                        </select>
+                        <select class="form-control" id="filter-transmission">
+                            <option value="">Transmission</option>
+                            <option value="automatic">Automatic</option>
+                            <option value="manual">Manual</option>
+                            <option value="cvt">CVT</option>
+                            <option value="dct">DCT</option>
+                        </select>
+                        <select class="form-control" id="filter-fuel">
+                            <option value="">Fuel Type</option>
+                            <option value="petrol">Petrol</option>
+                            <option value="diesel">Diesel</option>
+                            <option value="electric">Electric</option>
+                            <option value="hybrid">Hybrid</option>
+                            <option value="plug-in hybrid">Plug-in Hybrid</option>
+                            <option value="lpg">LPG</option>
+                        </select>
+                        <select class="form-control" id="filter-condition">
+                            <option value="">Condition</option>
+                            <option value="new">New</option>
+                            <option value="used">Used</option>
+                            <option value="certified">Certified</option>
+                        </select>
+                    </div>
+                    <!-- Row 3: Range Filters -->
+                    <div class="filter-row">
+                        <div class="filter-range-group">
+                            <label class="filter-range-label">Year</label>
+                            <div class="filter-range-inputs">
+                                <input type="number" id="filter-year-from" class="form-control" placeholder="From" min="1900" max="2100">
+                                <span class="filter-range-sep">–</span>
+                                <input type="number" id="filter-year-to" class="form-control" placeholder="To" min="1900" max="2100">
+                            </div>
+                        </div>
+                        <div class="filter-range-group">
+                            <label class="filter-range-label">Price (EGP)</label>
+                            <div class="filter-range-inputs">
+                                <input type="number" id="filter-price-min" class="form-control" placeholder="Min" min="0">
+                                <span class="filter-range-sep">–</span>
+                                <input type="number" id="filter-price-max" class="form-control" placeholder="Max" min="0">
+                            </div>
+                        </div>
+                        <div class="filter-range-group">
+                            <label class="filter-range-label">Mileage (km)</label>
+                            <div class="filter-range-inputs">
+                                <input type="number" id="filter-mileage-min" class="form-control" placeholder="Min" min="0">
+                                <span class="filter-range-sep">–</span>
+                                <input type="number" id="filter-mileage-max" class="form-control" placeholder="Max" min="0">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Row 4: Text Filters -->
+                    <div class="filter-row">
+                        <input type="text" id="filter-color" class="form-control" placeholder="Color">
+                        <input type="text" id="filter-body-type" class="form-control" placeholder="Body Type (SUV, Sedan...)">
+                        <input type="text" id="filter-location" class="form-control" placeholder="Location">
+                        <button class="btn btn-outline btn-sm" id="clear-filters">✕ Clear All</button>
+                    </div>
                 </div>
-                <span class="text-muted text-sm" id="results-count" style="margin-left:auto;"></span>
+
+                <!-- Results Count -->
+                <div class="filter-results-row">
+                    <span class="text-muted text-sm" id="results-count"></span>
+                </div>
             </div>
 
             <!-- Cars Grid -->
@@ -104,8 +171,8 @@
 </div>
 
 <!-- ============================================================
-   CAR DETAIL MODAL
-   ============================================================ -->
+     CAR DETAIL MODAL
+     ============================================================ -->
 <div class="modal-overlay" id="car-detail-modal">
     <div class="modal modal-xl" id="car-detail-content">
         <div class="modal-header">
@@ -118,15 +185,14 @@
             </div>
         </div>
         <div class="modal-footer" id="car-detail-footer">
-            <!-- Owner action buttons added dynamically -->
             <button class="btn btn-outline" data-close-modal="car-detail-modal">Close</button>
         </div>
     </div>
 </div>
 
 <!-- ============================================================
-   ADD / EDIT CAR MODAL
-   ============================================================ -->
+     ADD / EDIT CAR MODAL
+     ============================================================ -->
 <div class="modal-overlay" id="car-form-modal">
     <div class="modal modal-lg">
         <div class="modal-header">
@@ -208,7 +274,6 @@
                         <input type="number" id="cf-price" class="form-control" placeholder="0" min="0" required>
                     </div>
                     <input type="hidden" id="cf-currency" value="EGP">
-
                     <div class="form-group">
                         <label class="form-label">Location</label>
                         <input type="text" id="cf-location" class="form-control" placeholder="City or area">
@@ -224,7 +289,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">VIN</label>
-                        <input type="text" id="cf-vin" class="form-control" placeholder="Vehicle ID Number">
+                        <input type="text" id="cf-vin" class="form-control" placeholder="Vehicle Identification Number">
                     </div>
                     <div class="form-group car-form-full">
                         <label class="form-label">Description</label>
@@ -241,6 +306,31 @@
                         </div>
                         <div class="image-preview-list" id="image-preview-list"></div>
                     </div>
+
+                    <!-- ==========================================
+                         CAR INSPECTION SECTION (Owner only)
+                         ========================================== -->
+                    <div class="car-form-full inspection-section" id="inspection-section">
+                        <div class="inspection-section-title">📋 Car Inspection</div>
+                        <div class="inspection-current" id="inspection-current" style="display:none;">
+                            <div class="inspection-file-info">
+                                <span class="inspection-file-icon">📄</span>
+                                <span id="inspection-file-name">inspection.pdf</span>
+                            </div>
+                            <div class="inspection-current-actions">
+                                <a href="#" id="view-inspection-link" target="_blank" class="btn btn-sm btn-outline">👁 View</a>
+                                <button type="button" id="remove-inspection-btn" class="btn btn-sm btn-danger">✕ Remove</button>
+                            </div>
+                        </div>
+                        <div class="image-upload-area inspection-upload-area" id="inspection-upload-area">
+                            <input type="file" id="inspection-file-input" accept="*/*">
+                            <div class="upload-icon">📋</div>
+                            <p style="font-weight:600;">Click to upload Car Inspection</p>
+                            <p class="text-muted text-sm">PDF, JPG, PNG, Word, Excel, or any file — Stored securely</p>
+                        </div>
+                        <div id="inspection-pending-name" class="inspection-pending" style="display:none;"></div>
+                    </div>
+
                 </div>
             </form>
         </div>
@@ -251,14 +341,17 @@
     </div>
 </div>
 
-<!-- Scripts -->
+<!-- Scripts (html2pdf for Arabic support) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="./js/logo-b64.js"></script>
 <script src="./config/supabase-config.js"></script>
 <script src="./js/supabase-client.js"></script>
 <script src="./js/auth.js"></script>
 <script src="./js/guards.js"></script>
 <script src="./js/ui-helpers.js"></script>
 <script src="./js/realtime.js"></script>
+<script src="./js/logs.js"></script>
 <script src="./js/cars.js"></script>
 </body>
 </html>

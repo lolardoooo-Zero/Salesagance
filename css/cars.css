@@ -482,3 +482,291 @@
         grid-template-columns: 1fr 1fr;
     }
 }
+
+/* ============================================================
+   ADVANCED FILTER PANEL
+   ============================================================ */
+.filter-panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+}
+
+.filter-search-row {
+    gap: 12px;
+}
+
+.filter-advanced {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-top: 1px solid var(--color-border);
+    padding-top: 14px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.filter-advanced-toggle {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.filter-count-badge {
+    background: var(--color-red);
+    color: #fff;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.filter-range-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    flex: 1;
+    min-width: 200px;
+}
+
+.filter-range-label {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.filter-range-inputs {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-range-inputs .form-control {
+    flex: 1;
+    min-width: 0;
+}
+
+.filter-range-sep {
+    color: var(--color-muted);
+    flex-shrink: 0;
+}
+
+.filter-results-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+/* ============================================================
+   CAR CARD — PDF ACTION BUTTON
+   ============================================================ */
+.car-card-action-btn.pdf {
+    background: rgba(168, 85, 247, 0.85);
+    color: #fff;
+}
+
+.car-card-action-btn.pdf:hover {
+    background: rgba(168, 85, 247, 1);
+}
+
+/* ============================================================
+   CAR INSPECTION SECTION (in form modal)
+   ============================================================ */
+.inspection-section {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    background: rgba(255,255,255,0.02);
+}
+
+.inspection-section-title {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--color-accent, var(--color-red));
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.inspection-upload-area {
+    padding: 28px;
+    border: 2px dashed var(--color-border-2);
+    border-radius: var(--radius-md);
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    grid-column: unset !important;
+}
+
+.inspection-upload-area:hover {
+    border-color: var(--color-red);
+    background: var(--color-red-subtle);
+}
+
+.inspection-upload-area input {
+    display: none;
+}
+
+.inspection-current {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.inspection-file-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--color-text);
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.inspection-file-icon {
+    font-size: 1.25rem;
+}
+
+.inspection-current-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.inspection-pending {
+    margin-top: 10px;
+    padding: 10px 14px;
+    background: rgba(34,197,94,0.08);
+    border: 1px solid rgba(34,197,94,0.25);
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    color: #22c55e;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* ============================================================
+   CAR DETAIL — INSPECTION BUTTON
+   ============================================================ */
+.inspection-view-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: rgba(168,85,247,0.12);
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: var(--radius-md);
+    color: #c084fc;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all var(--transition);
+    margin-top: 8px;
+    width: fit-content;
+}
+
+.inspection-view-btn:hover {
+    background: rgba(168,85,247,0.22);
+    border-color: rgba(168,85,247,0.5);
+    color: #d8b4fe;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Inline image preview block in car detail */
+.inspection-image-preview-block {
+    margin-top: 8px;
+}
+
+.inspection-inline-image {
+    width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+    background: #111;
+    cursor: zoom-in;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: block;
+}
+
+.inspection-inline-image:hover {
+    transform: scale(1.015);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.inspection-image-error {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: rgba(255,0,0,0.08);
+    border: 1px solid rgba(255,0,0,0.2);
+    border-radius: var(--radius-md);
+    color: var(--text-muted);
+    font-size: 0.875rem;
+}
+
+/* ============================================================
+   FILTER BAR (override for new layout)
+   ============================================================ */
+.filter-bar {
+    display: none; /* replaced by .filter-panel */
+}
+
+@media (max-width: 768px) {
+    .filter-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filter-range-group {
+        min-width: 100%;
+    }
+
+    .filter-search-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    #sort-select {
+        width: 100% !important;
+    }
+}
